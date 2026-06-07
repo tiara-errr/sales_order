@@ -1,7 +1,8 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cetak Laporan Buku</title>
+    <title>Cetak Laporan Produk</title>
 
     <style>
         body{
@@ -9,7 +10,7 @@
         }
 
         h3{
-            text-align: center;
+            text-align:center;
         }
 
         table{
@@ -18,17 +19,17 @@
         }
 
         table, th, td{
-            border: 1px solid black;
+            border:1px solid black;
         }
 
         th, td{
             padding:8px;
-            text-align: center;
+            text-align:center;
         }
 
         @media print{
-            button {
-                display: none;
+            button{
+                display:none;
             }
         }
     </style>
@@ -36,27 +37,15 @@
 
 <body>
 
-<h3>LAPORAN DATA BUKU</h3>
-
-<?php if($id_kategori): ?>
-<p>Kategori:
-    <?php
-    foreach($kategori as $k){
-        if($k->id == $id_kategori){
-            echo $k->nama_kategori;
-        }
-    }
-    ?>
-</p>
-<?php endif; ?>
+<h3>LAPORAN DATA PRODUK</h3>
 
 <table>
 
 <tr>
     <th>No</th>
-    <th>Kode</th>
-    <th>Judul</th>
-    <th>Kategori</th>
+    <th>Kode Produk</th>
+    <th>Nama Produk</th>
+    <th>Harga</th>
     <th>Stok</th>
 </tr>
 
@@ -64,9 +53,9 @@
 
 <tr>
     <td><?= $no++; ?></td>
-    <td><?= $d->kode_buku; ?></td>
-    <td><?= $d->judul_buku; ?></td>
-    <td><?= $d->nama_kategori; ?></td>
+    <td><?= $d->kode; ?></td>
+    <td><?= $d->nama_produk; ?></td>
+    <td>Rp <?= number_format($d->harga,0,',','.'); ?></td>
     <td><?= $d->stok; ?></td>
 </tr>
 
@@ -77,7 +66,7 @@
 <br><br>
 
 <p style="text-align:right;">
-    Tangerang, <?= date('d-m-y'); ?><br><br><br><br><br>
+    Tangerang, <?= date('d-m-Y'); ?><br><br><br><br><br>
     (Admin)
 </p>
 

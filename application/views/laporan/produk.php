@@ -1,64 +1,86 @@
+
 <div class="container-fluid">
-    <h3> Laporan Data Buku </h3>
+
+    <h3>Laporan Data Produk</h3>
 
     <form method="get">
 
-        <select name="id_kategori" class="form-control mb-2">
+        <div class="row">
 
-            <option value="">-- Semua Kategori --</option>
+            <div class="col-md-4">
 
-            <?php foreach($kategori as $k): ?>
+                <label>Pilih Produk</label>
 
-            <option value="<?= $k->id; ?>"
-            <?= ($id_kategori == $k->id) ? 'selected' : ''; ?>>
+                <select name="id_produk" class="form-control">
 
-                <?= $k->nama_kategori; ?>
+                    <option value="">-- Semua Produk --</option>
 
-            </option>
+                    <?php foreach($produk as $p): ?>
 
-            <?php endforeach; ?>
+                    <option value="<?= $p->id_produk; ?>"
+                        <?= ($id_produk == $p->id_produk) ? 'selected' : ''; ?>>
 
-        </select>
+                        <?= $p->nama_produk; ?>
 
-        <button type="submit" class="btn btn-primary btn-sm">
-            Filter
-        </button>
+                    </option>
 
-        <a href="<?= site_url('laporan/buku');?>"
-        class="btn btn-secondary btn-sm">
-        Reset
-        </a>
+                    <?php endforeach; ?>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-4 mt-4">
+
+                <button type="submit"
+                        class="btn btn-primary btn-sm">
+                    Filter
+                </button>
+
+                <a href="<?= site_url('laporan/produk'); ?>"
+                   class="btn btn-secondary btn-sm">
+                    Reset
+                </a>
+
+            </div>
+
+        </div>
 
     </form>
 
     <br>
-    
-    <a href="<?= site_url('buku/cetak_buku?id_kategori='.$id_kategori);?>"
-    target="_blank" class="btn btn-success btn-sm">
-    Cetak PDF
+
+    <a href="<?= site_url('laporan/cetak_produk?id_produk='.$id_produk); ?>"
+       target="_blank"
+       class="btn btn-success btn-sm">
+       Cetak PDF
     </a>
 
     <table class="table table-bordered mt-3">
 
-    <tr>
-        <th>No</th>
-        <th>Kode</th>
-        <th>Judul</th>
-        <th>Kategori</th>
-        <th>Stok</th>
-    </tr>
+        <tr>
+            <th>No</th>
+            <th>Kode Produk</th>
+            <th>Nama Produk</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Terjual</th>
+        </tr>
 
-    <?php $no=1; foreach($data as $d): ?>
+        <?php $no=1; foreach($data as $d): ?>
 
-    <tr>
-        <td><?= $no++; ?></td>
-        <td><?= $d->kode_buku; ?></td>
-        <td><?= $d->judul_buku; ?></td>
-        <td><?= $d->nama_kategori; ?></td>
-        <td><?= $d->stok; ?></td>
-    </tr>
+        <tr>
+            <td><?= $no++; ?></td>
+            <td><?= $d->kode; ?></td>
+            <td><?= $d->nama_produk; ?></td>
+            <td>Rp <?= number_format($d->harga,0,',','.'); ?></td>
+            <td><?= $d->stok; ?></td>
+            <td><?= $d->terjual; ?></td>
+        </tr>
 
-    <?php endforeach;?>
+        <?php endforeach; ?>
 
     </table>
+
 </div>
+
