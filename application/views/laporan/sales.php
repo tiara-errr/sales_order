@@ -1,104 +1,256 @@
 
 <div class="container-fluid">
 
-    <h3>Laporan Penjualan Per Sales</h3>
+    <h2 class="h3 mb-4 text-gray-800">
+        Laporan Penjualan Per Sales
+    </h2>
 
-    <form method="get">
+    <div class="card shadow border-0 mb-4">
 
-        <div class="row">
+        <div class="card-header"
+             style="background:#97B38C;color:white;">
 
-            <div class="col-md-4">
+            <h5 class="mb-0">
+                Filter Sales
+            </h5>
 
-                <label>Pilih Sales</label>
+        </div>
 
-                <select name="id_sales" class="form-control">
+        <div class="card-body">
 
-                    <option value="">-- Semua Sales --</option>
+            <form method="get">
 
-                    <?php foreach($sales as $s): ?>
+                <div class="row">
 
-                    <option value="<?= $s->id_sales; ?>"
-                        <?= ($id_sales == $s->id_sales) ? 'selected' : ''; ?>>
+                    <div class="col-md-5">
 
-                        <?= $s->nama_sales; ?>
+                        <label>
+                            Pilih Sales
+                        </label>
 
-                    </option>
+                        <select name="id_sales"
+                                class="form-control">
 
-                    <?php endforeach; ?>
+                            <option value="">
+                                -- Semua Sales --
+                            </option>
 
-                </select>
+                            <?php foreach($sales as $s): ?>
 
-            </div>
+                            <option value="<?= $s->id_sales; ?>"
+                                <?= ($id_sales == $s->id_sales) ? 'selected' : ''; ?>>
 
-            <div class="col-md-4 mt-4">
+                                <?= $s->nama_sales; ?>
 
-                <button type="submit"
-                        class="btn btn-primary btn-sm">
-                    Filter
-                </button>
+                            </option>
 
-                <a href="<?= site_url('laporan/sales'); ?>"
-                   class="btn btn-secondary btn-sm">
-                    Reset
-                </a>
+                            <?php endforeach; ?>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label>&nbsp;</label>
+
+                        <div>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="fas fa-search"></i>
+                                Filter
+
+                            </button>
+
+                            <a href="<?= site_url('laporan/sales'); ?>"
+                               class="btn btn-secondary">
+
+                                <i class="fas fa-sync"></i>
+                                Reset
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <?php
+    $total = 0;
+
+    foreach($data as $d){
+        $total += $d->total_harga;
+    }
+    ?>
+
+    <div class="row mb-3">
+
+        <div class="col-md-4">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body text-center">
+
+                    <i class="fas fa-money-bill-wave fa-3x mb-2"
+                       style="color:#97B38C;"></i>
+
+                    <h6 class="text-muted">
+                        Total Penjualan
+                    </h6>
+
+                    <h4>
+                        Rp <?= number_format($total,0,',','.'); ?>
+                    </h4>
+
+                </div>
 
             </div>
 
         </div>
 
-    </form>
-
-    <br>
+    </div>
 
     <a href="<?= site_url('laporan/cetak_sales?id_sales='.$id_sales); ?>"
        target="_blank"
-       class="btn btn-success btn-sm">
-       Cetak PDF
+       class="btn btn-success mb-3">
+
+        <i class="fas fa-print"></i>
+        Cetak PDF
+
     </a>
 
-    <table class="table table-bordered mt-3">
+    <div class="card shadow border-0">
 
-        <tr>
-            <th>No</th>
-            <th>Sales</th>
-            <th>Kode Order</th>
-            <th>Pelanggan</th>
-            <th>Total Harga</th>
-            <th>Status</th>
-        </tr>
+        <div class="card-header"
+             style="background:#97B38C;color:white;">
 
-        <?php
-        $no = 1;
-        $total = 0;
+            <h5 class="mb-0">
+                Data Penjualan Sales
+            </h5>
 
-        foreach($data as $d):
+        </div>
 
-            $total += $d->total_harga;
-        ?>
+        <div class="card-body">
 
-        <tr>
-            <td><?= $no++; ?></td>
-            <td><?= $d->nama_sales; ?></td>
-            <td><?= $d->kode_order; ?></td>
-            <td><?= $d->nama_pelanggan; ?></td>
-            <td>
-                Rp <?= number_format($d->total_harga,0,',','.'); ?>
-            </td>
-            <td><?= ucfirst($d->status); ?></td>
-        </tr>
+            <div class="table-responsive">
 
-        <?php endforeach; ?>
+                <table class="table table-hover table-bordered">
 
-        <tr>
-            <th colspan="4" style="text-align:right">
-                Total Penjualan
-            </th>
+                    <thead class="thead-light">
 
-            <th colspan="2">
-                Rp <?= number_format($total,0,',','.'); ?>
-            </th>
-        </tr>
+                        <tr>
 
-    </table>
+                            <th>No</th>
+                            <th>Sales</th>
+                            <th>Kode Order</th>
+                            <th>Pelanggan</th>
+                            <th>Total Harga</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <?php
+                        $no = 1;
+                        ?>
+
+                        <?php foreach($data as $d): ?>
+
+                        <tr>
+
+                            <td><?= $no++; ?></td>
+
+                            <td>
+                                <?= $d->nama_sales; ?>
+                            </td>
+
+                            <td>
+                                <?= $d->kode_order; ?>
+                            </td>
+
+                            <td>
+                                <?= $d->nama_pelanggan; ?>
+                            </td>
+
+                            <td>
+                                Rp <?= number_format($d->total_harga,0,',','.'); ?>
+                            </td>
+
+                            <td>
+
+                                <?php if($d->status == 'draft'): ?>
+
+                                    <span class="badge badge-secondary">
+                                        Draft
+                                    </span>
+
+                                <?php elseif($d->status == 'dikirim'): ?>
+
+                                    <span class="badge badge-info">
+                                        Dikirim
+                                    </span>
+
+                                <?php elseif($d->status == 'selesai'): ?>
+
+                                    <span class="badge badge-success">
+                                        Selesai
+                                    </span>
+
+                                <?php elseif($d->status == 'dibatalkan'): ?>
+
+                                    <span class="badge badge-danger">
+                                        Dibatalkan
+                                    </span>
+
+                                <?php endif; ?>
+
+                            </td>
+
+                        </tr>
+
+                        <?php endforeach; ?>
+
+                    </tbody>
+
+                    <tfoot>
+
+                        <tr>
+
+                            <th colspan="4"
+                                class="text-right">
+
+                                Total Penjualan
+
+                            </th>
+
+                            <th colspan="2">
+
+                                Rp <?= number_format($total,0,',','.'); ?>
+
+                            </th>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>

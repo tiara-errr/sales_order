@@ -3,16 +3,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class salesorder extends CI_Controller {
 
-    public function __construct()
-    {
-        parent::__construct();
+   
+public function __construct()
+{
+    parent::__construct();
 
-        if(!$this->session->userdata('login')){
-            redirect('login');
-        }
-
-        $this->load->model('salesorder_model');
+    if(!$this->session->userdata('login')){
+        redirect('login');
     }
+
+    $this->load->model('salesorder_model');
+
+    // Sales wajib validasi dulu
+    if(
+        $this->session->userdata('role') == 'sales'
+        &&
+        !$this->session->userdata('id_sales_aktif')
+    ){
+        redirect('dashboard');
+    }
+
+}
 
     public function index()
     {
@@ -55,7 +66,14 @@ class salesorder extends CI_Controller {
     $data = [
         'kode_order'    => uniqid('ORD-'),
         'id_pelanggan'  => $this->input->post('id_pelanggan'),
-        'id_sales'      => $this->input->post('id_sales'),
+        
+'id_sales' => (
+    $this->session->userdata('role') == 'sales'
+)
+? $this->session->userdata('id_sales_aktif')
+: $this->input->post('id_sales'),
+
+
         'tanggal_order' => $this->input->post('tanggal_order'),
         'total_harga'   => $subtotal,
         'status'        => $this->input->post('status'),
@@ -86,8 +104,14 @@ $this->db->update('produk');
     redirect('salesorder');
 }
 
+
 public function edit_status($id)
 {
+    // Sales tidak boleh ubah status
+    if($this->session->userdata('role') == 'sales'){
+        redirect('salesorder');
+    }
+
     $data['order'] = $this->salesorder_model->get_by_id($id);
 
     $this->load->view('templates/header');
@@ -97,30 +121,50 @@ public function edit_status($id)
     $this->load->view('templates/footer');
 }
 
-
 public function update_status($id)
 {
     $status_baru = $this->input->post('status');
 
     $order = $this->salesorder_model->get_by_id($id);
 
-    if(
-        $status_baru == 'dibatalkan' &&
-        $order->status != 'dibatalkan'
-    ){
+    $detail = $this->db
+        ->get_where(
+            'detail_order',
+            ['id_order' => $id]
+        )
+        ->row();
 
-        $detail = $this->db
-            ->get_where(
-                'detail_order',
-                ['id_order' => $id]
-            )
-            ->row();
+    if($detail){
 
-        if($detail){
+        // Aktif -> Dibatalkan
+        if(
+            $order->status != 'dibatalkan' &&
+            $status_baru == 'dibatalkan'
+        ){
 
             $this->db->set(
                 'stok',
                 'stok + '.$detail->qty,
+                FALSE
+            );
+
+            $this->db->where(
+                'id_produk',
+                $detail->id_produk
+            );
+
+            $this->db->update('produk');
+        }
+
+        // Dibatalkan -> Aktif lagi
+        if(
+            $order->status == 'dibatalkan' &&
+            $status_baru != 'dibatalkan'
+        ){
+
+            $this->db->set(
+                'stok',
+                'stok - '.$detail->qty,
                 FALSE
             );
 
