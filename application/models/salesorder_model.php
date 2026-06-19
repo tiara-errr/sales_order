@@ -37,7 +37,7 @@ class salesorder_model extends CI_Model {
             'produk.id_produk = detail_order.id_produk'
         );
 
-        // Filter khusus role sales
+        // Sales hanya melihat order miliknya sendiri
         if(
             $this->session->userdata('role') == 'sales'
             &&
@@ -60,20 +60,27 @@ class salesorder_model extends CI_Model {
     public function get_by_id($id)
     {
         $this->db->where('id_order', $id);
-        return $this->db->get('sales_order')->row();
-    }
 
-    public function delete($id)
-    {
-        return $this->db->delete('sales_order', [
-            'id_order' => $id
-        ]);
+        return $this->db
+                    ->get('sales_order')
+                    ->row();
     }
 
     public function update($id, $data)
     {
         $this->db->where('id_order', $id);
-        return $this->db->update('sales_order', $data);
+
+        return $this->db
+                    ->update('sales_order', $data);
+    }
+
+    public function delete($id)
+    {
+        return $this->db->delete(
+            'sales_order',
+            [
+                'id_order' => $id
+            ]
+        );
     }
 }
-

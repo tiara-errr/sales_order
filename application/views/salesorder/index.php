@@ -5,6 +5,8 @@
     Data Sales Order
 </h2>
 
+<?php if($this->session->userdata('role') == 'sales'): ?>
+
 <a href="<?= site_url('salesorder/tambah'); ?>"
    class="btn btn-primary mb-3">
 
@@ -12,6 +14,8 @@
     Tambah Order
 
 </a>
+
+<?php endif; ?>
 
 <div class="card shadow border-0">
 
@@ -35,7 +39,6 @@
                 <thead class="thead-light">
 
                     <tr>
-
                         <th>No</th>
                         <th>Kode Order</th>
                         <th>Pelanggan</th>
@@ -46,7 +49,6 @@
                         <th>Total Harga</th>
                         <th>Status</th>
                         <th>Aksi</th>
-
                     </tr>
 
                 </thead>
@@ -59,29 +61,19 @@
 
                     <td><?= $no++; ?></td>
 
-                    <td>
-                        <?= $d->kode_order; ?>
-                    </td>
+                    <td><?= $d->kode_order; ?></td>
 
-                    <td>
-                        <?= $d->nama_pelanggan; ?>
-                    </td>
+                    <td><?= $d->nama_pelanggan; ?></td>
 
-                    <td>
-                        <?= $d->nama_sales; ?>
-                    </td>
+                    <td><?= $d->nama_sales; ?></td>
 
-                    <td>
-                        <?= $d->nama_produk; ?>
-                    </td>
+                    <td><?= $d->nama_produk; ?></td>
 
                     <td>
                         Rp <?= number_format($d->harga,0,',','.'); ?>
                     </td>
 
-                    <td>
-                        <?= $d->qty; ?>
-                    </td>
+                    <td><?= $d->qty; ?></td>
 
                     <td>
                         Rp <?= number_format($d->total_harga,0,',','.'); ?>
@@ -119,7 +111,7 @@
 
                     <td>
 
-                        <?php if($this->session->userdata('role') != 'sales'): ?>
+                        <?php if($this->session->userdata('role') == 'sales'): ?>
 
                         <a href="<?= site_url('salesorder/edit_status/'.$d->id_order); ?>"
                            class="btn btn-warning btn-sm">
@@ -155,4 +147,3 @@
 </div>
 
 </div>
-

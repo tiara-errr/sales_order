@@ -1,51 +1,89 @@
 
 <div class="container-fluid">
 
-<h2>Edit Status Order</h2>
+    <h2 class="h3 mb-4 text-gray-800">
+        Edit Status Order
+    </h2>
 
-<form method="post"
-      action="<?= site_url('salesorder/update_status/'.$order->id_order); ?>">
+    <div class="card shadow border-0">
 
-    <div class="form-group">
+        <div class="card-header"
+             style="background:#97B38C;color:white;">
 
-        <label>Status</label>
+            <h5 class="mb-0">
+                Update Status Sales Order
+            </h5>
 
-        <select name="status" class="form-control">
+        </div>
 
-            <option value="draft"
-                <?= $order->status=='draft' ? 'selected' : ''; ?>>
-                Draft
-            </option>
+        <div class="card-body">
 
-            <option value="dikirim"
-                <?= $order->status=='dikirim' ? 'selected' : ''; ?>>
-                Dikirim
-            </option>
+            <form method="post"
+                  action="<?= site_url('salesorder/update_status/'.$order->id_order); ?>">
 
-            <option value="selesai"
-                <?= $order->status=='selesai' ? 'selected' : ''; ?>>
-                Selesai
-            </option>
+                <div class="form-group">
 
-            <option value="dibatalkan"
-                <?= $order->status=='dibatalkan' ? 'selected' : ''; ?>>
-                Dibatalkan
-            </option>
+                    <label>
+                        Status Order
+                    </label>
 
-        </select>
+                    <select name="status"
+                            class="form-control">
+
+                        <option value="draft"
+                            <?= $order->status=='draft' ? 'selected' : ''; ?>>
+
+                            Draft
+
+                        </option>
+
+                        <option value="dikirim"
+                            <?= $order->status=='dikirim' ? 'selected' : ''; ?>>
+
+                            Dikirim
+
+                        </option>
+
+                        <option value="selesai"
+                            <?= $order->status=='selesai' ? 'selected' : ''; ?>>
+
+                            Selesai
+
+                        </option>
+
+                        <option value="dibatalkan"
+                            <?= $order->status=='dibatalkan' ? 'selected' : ''; ?>>
+
+                            Dibatalkan
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <hr>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="fas fa-save"></i>
+                    Simpan
+
+                </button>
+
+                <a href="<?= site_url('salesorder'); ?>"
+                   class="btn btn-secondary">
+
+                    <i class="fas fa-arrow-left"></i>
+                    Kembali
+
+                </a>
+
+            </form>
+
+        </div>
 
     </div>
 
-    <button type="submit" class="btn btn-primary">
-        Simpan
-    </button>
-
-    <a href="<?= site_url('salesorder'); ?>"
-       class="btn btn-secondary">
-       Kembali
-    </a>
-
-</form>
-
 </div>
-

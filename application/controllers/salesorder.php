@@ -107,12 +107,21 @@ $this->db->update('produk');
 
 public function edit_status($id)
 {
-    // Sales tidak boleh ubah status
-    if($this->session->userdata('role') == 'sales'){
+    // Admin tidak boleh edit status
+    if($this->session->userdata('role') == 'admin'){
         redirect('salesorder');
     }
 
     $data['order'] = $this->salesorder_model->get_by_id($id);
+
+    // Sales hanya boleh edit order miliknya
+    if(
+        $this->session->userdata('role') == 'sales'
+        &&
+        $data['order']->id_sales != $this->session->userdata('id_sales_aktif')
+    ){
+        redirect('salesorder');
+    }
 
     $this->load->view('templates/header');
     $this->load->view('templates/sidebar');
@@ -121,11 +130,26 @@ public function edit_status($id)
     $this->load->view('templates/footer');
 }
 
+
 public function update_status($id)
 {
-    $status_baru = $this->input->post('status');
-
     $order = $this->salesorder_model->get_by_id($id);
+
+    // Admin tidak boleh update status
+    if($this->session->userdata('role') == 'admin'){
+        redirect('salesorder');
+    }
+
+    // Sales hanya boleh update order miliknya
+    if(
+        $this->session->userdata('role') == 'sales'
+        &&
+        $order->id_sales != $this->session->userdata('id_sales_aktif')
+    ){
+        redirect('salesorder');
+    }
+
+    $status_baru = $this->input->post('status');
 
     $detail = $this->db
         ->get_where(
@@ -136,12 +160,10 @@ public function update_status($id)
 
     if($detail){
 
-        // Aktif -> Dibatalkan
         if(
             $order->status != 'dibatalkan' &&
             $status_baru == 'dibatalkan'
         ){
-
             $this->db->set(
                 'stok',
                 'stok + '.$detail->qty,
@@ -156,12 +178,10 @@ public function update_status($id)
             $this->db->update('produk');
         }
 
-        // Dibatalkan -> Aktif lagi
         if(
             $order->status == 'dibatalkan' &&
             $status_baru != 'dibatalkan'
         ){
-
             $this->db->set(
                 'stok',
                 'stok - '.$detail->qty,
@@ -183,6 +203,7 @@ public function update_status($id)
 
     redirect('salesorder');
 }
+
 
 public function cetak($id)
 {
