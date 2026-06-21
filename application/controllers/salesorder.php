@@ -104,14 +104,8 @@ $this->db->update('produk');
     redirect('salesorder');
 }
 
-
 public function edit_status($id)
 {
-    // Admin tidak boleh edit status
-    if($this->session->userdata('role') == 'admin'){
-        redirect('salesorder');
-    }
-
     $data['order'] = $this->salesorder_model->get_by_id($id);
 
     // Sales hanya boleh edit order miliknya
@@ -134,11 +128,6 @@ public function edit_status($id)
 public function update_status($id)
 {
     $order = $this->salesorder_model->get_by_id($id);
-
-    // Admin tidak boleh update status
-    if($this->session->userdata('role') == 'admin'){
-        redirect('salesorder');
-    }
 
     // Sales hanya boleh update order miliknya
     if(
@@ -203,7 +192,6 @@ public function update_status($id)
 
     redirect('salesorder');
 }
-
 
 public function cetak($id)
 {

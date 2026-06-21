@@ -5,8 +5,12 @@
     Data Sales Order
 </h2>
 
-<?php if($this->session->userdata('role') == 'sales'): ?>
 
+<?php if(
+    $this->session->userdata('role') == 'sales'
+    ||
+    $this->session->userdata('role') == 'admin'
+): ?>
 <a href="<?= site_url('salesorder/tambah'); ?>"
    class="btn btn-primary mb-3">
 
@@ -110,8 +114,12 @@
                     </td>
 
                     <td>
-
-                        <?php if($this->session->userdata('role') == 'sales'): ?>
+                    <?php if(
+    $this->session->userdata('role') == 'sales'
+    ||
+    $this->session->userdata('role') == 'admin'
+): ?>
+                        
 
                         <a href="<?= site_url('salesorder/edit_status/'.$d->id_order); ?>"
                            class="btn btn-warning btn-sm">
